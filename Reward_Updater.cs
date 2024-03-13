@@ -22,6 +22,7 @@ public class Reward_Updater : MonoBehaviour
     {
         while (true)
         {
+            //sends get request from server to check if user balance changed
             UnityWebRequest www = UnityWebRequest.Get(rewardCheckUrl + "?userId=" + SystemInfo.deviceUniqueIdentifier);
             yield return www.SendWebRequest();
 
@@ -37,15 +38,14 @@ public class Reward_Updater : MonoBehaviour
             }
 
            
-            yield return new WaitForSeconds(15);
+            yield return new WaitForSeconds(60);
         }
     }
 
     private int ParseCoinsFromResponse(string response)
     {
-        Debug.Log("rewardfsss" + response);
+        //gets the coins from the response and returns them
         CoinsData data = JsonUtility.FromJson<CoinsData>(response);
-        Debug.Log("ReWARDSDSSS -----------------------" + data.coins);
         return data.coins; 
     }
 
