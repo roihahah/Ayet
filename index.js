@@ -7,13 +7,13 @@ const app = express();
 const {updateUserBalance} = require('./users')
 app.use(express.json());
 
-
+//database connection
 mongoose.connect(process.env.MONGO_URL).then(() =>{
     console.log('--DATABASE CONNECTED SECCUCFULLY')
 }).catch((err) => console.log('--DATABASE CONNECTION FAILD :(' , err))
 
 app.get('/get' , (req, res) => {
-    
+    //test
     res.send("hey2")
 })
 app.get('/check', async (req, res) => {
@@ -39,14 +39,14 @@ app.get('/check', async (req, res) => {
     }
 });
 app.get('/callback', (req, res) => {
-    // Example payload validation - ensure to check against ayet's documentation for exact parameters
+    //gets parameters from url
     const network = req.query.network;
     const amount = req.query.amount;
     const external_identifier = req.query.external_identifier;
     const payout_usd = req.query.payout_usd;
     const currency_amount = req.query.currency_amount;
 
-    console.log(currency_amount)
+    
     updateUserBalance(external_identifier , currency_amount)
     
     res.status(200).send('Callback received successfully');
@@ -57,6 +57,3 @@ app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
 
-function updateUserCoinBalance(userId, coinsEarned) {
-    // Implement logic to update the user's coin balance in your database
-}
