@@ -1,4 +1,4 @@
-const User = require('./models/user')
+const User = require('../models/user')
 // Function to update user balance
 async function updateUserBalance(userId, amount) {
     try {
@@ -14,11 +14,38 @@ async function updateUserBalance(userId, amount) {
     }
 }
 
+async function sendUserMoney(ws,userId) {
+    let amount = 0
+    try {
+        const user = await User.findOne({ userId: userId }).exec();
+        if (user) {
+            // User found, send userId and coins as an integer
+              amount = user.amount
+            ws.send(JSON.stringify(amount))
+            await User.updateOne(
+                { userId: userId },
+                { $set: { amount: 0 } } // Reset amount to 0
+            );
+           
+        }
+
+    } catch (error) {
+        console.error('Error fetching user:', error);
+       
+    }
+
+}
+
+
+
+
 
 
 // Export the functions for use in other files
 module.exports = {
     updateUserBalance,
+    sendUserMoney,
+   
     
     
 };
